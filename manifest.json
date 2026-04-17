@@ -1,0 +1,26 @@
+{
+  "name": "背单词",
+  "short_name": "背单词",
+  "description": "游戏化背单词，学习更有趣",
+  "start_url": "/vocab-app/index.html",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#667eea",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='80' fill='%23667eea'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='280' font-family='Arial' fill='white'>📚</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='30' fill='%23667eea'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='105' font-family='Arial' fill='white'>📚</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "games"],
+  "lang": "zh-CN"
+}
