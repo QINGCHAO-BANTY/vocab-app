@@ -638,32 +638,10 @@ function updateStats() {
 
 function flipCard() { flashcard.classList.toggle('flipped'); }
 
-// 使用系统语音（Siri女声）朗读
+// 使用有道词典女声朗读
 function speakWithSiri(text) {
-  if ('speechSynthesis' in window) {
-    speechSynthesis.cancel(); // 停止之前的朗读
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'en-US';
-    utterance.rate = 0.9;
-    utterance.pitch = 1;
-    
-    // 优先使用英文女声（Siri女声）
-    const voices = speechSynthesis.getVoices();
-    // macOS 英文女声：Samantha, Victoria, Karen, Siri
-    const femaleVoice = voices.find(v => 
-      v.lang.includes('en') && 
-      (v.name.includes('Samantha') || v.name.includes('Siri') || 
-       v.name.includes('Victoria') || v.name.includes('Karen') ||
-       v.name.includes('女'))
-    );
-    if (femaleVoice) {
-      utterance.voice = femaleVoice;
-    }
-    speechSynthesis.speak(utterance);
-  } else {
-    // 降级到有道词典
-    new Audio(`https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(text)}&type=2`).play();
-  }
+  // 有道词典 type=2 是标准女声，type=1 是美式男声
+  new Audio(`https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(text)}&type=2`).play();
 }
 
 function speakWord(e) {
