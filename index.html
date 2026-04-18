@@ -634,6 +634,36 @@ function updateStats() {
   let level = levels[0];
   for (const l of levels) { if (xp >= l.minXp) level = l; }
   document.getElementById('levelBadge').textContent = `⭐ Lv.${levels.indexOf(level) + 1} ${level.name}`;
+  saveProgress();
+}
+
+// 保存学习记录
+function saveProgress() {
+  const data = {
+    xp, correct, wrong, streak,
+    mastered: [...mastered],
+    wordCount: words.length,
+    lastSave: new Date().toISOString()
+  };
+  localStorage.setItem('vocabProgress', JSON.stringify(data));
+}
+
+// 加载学习记录
+function loadProgress() {
+  const saved = localStorage.getItem('vocabProgress');
+  if (saved) {
+    const data = JSON.parse(saved);
+    // 如果词库数量变了（导入新词），重置进度
+    if (data.wordCount === words.length) {
+      xp = data.xp || 0;
+      correct = data.correct || 0;
+      wrong = data.wrong || 0;
+      streak = data.streak || 0;
+      mastered = new Set(data.mastered || []);
+      return true;
+    }
+  }
+  return false;
 }
 
 function flipCard() { flashcard.classList.toggle('flipped'); }
@@ -904,6 +934,12 @@ function loadAvatar() {
 
 // 初始化头像
 loadAvatar();
+
+// 加载学习记录
+if (loadProgress()) {
+  updateStats();
+  renderGrid();
+}
 
 // 预加载语音列表
 if ('speechSynthesis' in window) {
