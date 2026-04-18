@@ -638,7 +638,7 @@ function updateStats() {
 
 function flipCard() { flashcard.classList.toggle('flipped'); }
 
-// 使用系统语音（Siri）朗读
+// 使用系统语音（Siri女声）朗读
 function speakWithSiri(text) {
   if ('speechSynthesis' in window) {
     speechSynthesis.cancel(); // 停止之前的朗读
@@ -646,10 +646,19 @@ function speakWithSiri(text) {
     utterance.lang = 'en-US';
     utterance.rate = 0.9;
     utterance.pitch = 1;
-    // 尝试获取 Siri 语音
+    
+    // 优先使用英文女声（Siri女声）
     const voices = speechSynthesis.getVoices();
-    const siriVoice = voices.find(v => v.lang.includes('en') && (v.name.includes('Siri') || v.name.includes('Daniel') || v.default));
-    if (siriVoice) utterance.voice = siriVoice;
+    // macOS 英文女声：Samantha, Victoria, Karen, Siri
+    const femaleVoice = voices.find(v => 
+      v.lang.includes('en') && 
+      (v.name.includes('Samantha') || v.name.includes('Siri') || 
+       v.name.includes('Victoria') || v.name.includes('Karen') ||
+       v.name.includes('女'))
+    );
+    if (femaleVoice) {
+      utterance.voice = femaleVoice;
+    }
     speechSynthesis.speak(utterance);
   } else {
     // 降级到有道词典
