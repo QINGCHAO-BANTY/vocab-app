@@ -638,21 +638,35 @@ function updateStats() {
 
 function flipCard() { flashcard.classList.toggle('flipped'); }
 
+// 使用系统语音（Siri）朗读
+function speakWithSiri(text) {
+  if ('speechSynthesis' in window) {
+    speechSynthesis.cancel(); // 停止之前的朗读
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.9;
+    utterance.pitch = 1;
+    // 尝试获取 Siri 语音
+    const voices = speechSynthesis.getVoices();
+    const siriVoice = voices.find(v => v.lang.includes('en') && (v.name.includes('Siri') || v.name.includes('Daniel') || v.default));
+    if (siriVoice) utterance.voice = siriVoice;
+    speechSynthesis.speak(utterance);
+  } else {
+    // 降级到有道词典
+    new Audio(`https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(text)}&type=2`).play();
+  }
+}
+
 function speakWord(e) {
   e && e.stopPropagation();
-  new Audio(`https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(words[current].en)}&type=2`).play();
+  speakWithSiri(words[current].en);
 }
 
 function speakSentence(e) {
   e && e.stopPropagation();
   const sentence = words[current].sentence;
-  console.log('当前例句:', sentence);
   if (sentence) {
-    const url = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(sentence)}&type=2`;
-    console.log('朗读URL:', url);
-    new Audio(url).play().catch(err => console.error('朗读失败:', err));
-  } else {
-    console.log('没有例句可朗读');
+    speakWithSiri(sentence);
   }
 }
 
@@ -903,6 +917,12 @@ function loadAvatar() {
 
 // 初始化头像
 loadAvatar();
+
+// 预加载语音列表
+if ('speechSynthesis' in window) {
+  speechSynthesis.getVoices();
+  speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
+}
 
 createStars();
 updateCard();
